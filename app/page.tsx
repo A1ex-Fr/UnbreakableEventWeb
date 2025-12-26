@@ -1,13 +1,16 @@
 import LiveEventsHero from "@/components/sections/LiveEventsHero";
 import LiveEventsCarousel from "@/components/sections/LiveEventsCarousel";
-import BondingVsFailover from "@/components/sections/BondingVsFailover"; 
+import BondingVsFailover from "@/components/sections/BondingVsFailover";
 import HowItWorks from "@/components/sections/HowItWorks";
 import BondingSimulator from "@/components/sections/BondingSimulator";
 import LiveEventUseCases from "@/components/sections/LiveEventUseCases";
-import WhyBondedUplink from "@/components/sections/WhyBondedUplink"; 
-import TechnicalSpecs from "@/components/sections/TechnicalSpecs"; 
+import WhyBondedUplink from "@/components/sections/WhyBondedUplink";
+import TechnicalSpecs from "@/components/sections/TechnicalSpecs";
 import Pricing from "@/components/sections/Pricing";
 import Contact from "@/components/sections/Contact";
+
+const SECTION_GAP_CLASSES = "gap-12 sm:gap-12";
+const SECTION_BOTTOM_SPACER = "pb-12 sm:pb-12";
 
 export default function Page() {
   return (
@@ -23,7 +26,7 @@ export default function Page() {
         
         This gap applies evenly between *every* child component below.
       */}
-      <div className="flex flex-col gap-12 sm:gap-12">
+      <div className={`flex flex-col ${SECTION_GAP_CLASSES}`}>
 
         {/* 1. HERO: The Promise. "Unbreakable Internet for Live Events." */}
         <LiveEventsHero />
@@ -57,7 +60,7 @@ export default function Page() {
         <Contact />
         
         {/* Bottom spacer to breathe before footer (optional) */}
-        <div className="pb-12 sm:pb-12" />
+        <div className={SECTION_BOTTOM_SPACER} />
       </div>
     </main>
   );
