@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Global polish ---------- */
+:root {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+
+  /* brand-ish tokens (optional) */
+  --bg: 11 15 20;          /* #0b0f14 */
+  --card: 17 24 39;        /* slate-ish */
+  --text: 255 255 255;
+  --muted: 148 163 184;    /* slate-400 */
+  --ring: 239 68 68;       /* red-500 */
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1000px 600px at 20% 10%, rgba(239, 68, 68, 0.14), transparent 55%),
+    radial-gradient(900px 500px at 85% 15%, rgba(255, 255, 255, 0.06), transparent 60%),
+    linear-gradient(180deg, rgba(var(--bg), 1) 0%, rgba(3, 7, 12, 1) 100%);
+  color: rgb(var(--text));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+}
+
+/* Nice text selection */
+::selection {
+  background: rgba(var(--ring), 0.35);
+}
+
+/* Better anchor defaults (keeps your UI consistent even without Tailwind) */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+
+/* Focus ring (accessibility) */
+:focus-visible {
+  outline: 2px solid rgba(var(--ring), 0.65);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Remove ugly tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Optional helpers you can use in className ---------- */
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 20px 60px -35px rgba(0, 0, 0, 0.75);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(14px);
+  }
+
+  .grid-fade {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(circle at center, #000 45%, transparent 75%);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
