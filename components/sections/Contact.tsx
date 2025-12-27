@@ -46,14 +46,15 @@ Additional notes:
   };
 
   return (
-    <Section id="contact" className={sectionClassName}>
-      <div className="mx-auto max-w-6xl px-4">
+    // FIX: Removed 'px-4' from parent container so children can bleed to edges on mobile
+    <Section id="contact" className={cn("px-0 sm:px-6", sectionClassName)}>
+      <div className="mx-auto max-w-6xl">
         
         {/* Contact Form Section */}
-        <div className="rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-2xl sm:p-10">
+        {/* FIX: Mobile styles (rounded-none, border-x-0) vs Desktop styles (rounded-3xl, border) */}
+        <div className="overflow-hidden bg-slate-950 border-y border-white/10 p-6 shadow-none sm:rounded-3xl sm:border sm:p-10 sm:shadow-2xl">
           
           <div className="mb-8">
-            {/* DESIGN FIX: text-slate-100 instead of text-white */}
             <h2 className="text-2xl font-bold tracking-tight text-slate-100 sm:text-3xl">
               Plan your live event uplink
             </h2>
@@ -95,7 +96,6 @@ Additional notes:
               {/* Copy Template Box */}
               <div className="relative flex-1 rounded-3xl border border-white/5 bg-slate-900/50 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  {/* DESIGN FIX: text-slate-200 */}
                   <label htmlFor="template-area" className="text-sm font-semibold text-slate-200 cursor-pointer">
                     Copy / paste template
                   </label>
@@ -128,7 +128,6 @@ Additional notes:
             >
               <div className="grid gap-5">
                 <div className="grid gap-2">
-                  {/* DESIGN FIX: text-slate-300 is softer */}
                   <label htmlFor="contact-name" className="text-sm font-medium text-slate-300">
                     Name
                   </label>

@@ -2,14 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Check, Copy, Menu, X, Tag } from "lucide-react";
+import { Check, Copy, Menu, X, Tag, ArrowRight } from "lucide-react";
 
 const COUPON_CODE = "SAVE100";
-const COUPON_TEXT = "Best online price — Save $100 today";
+const COUPON_TEXT = "Save $100 on your first order";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const nav = useMemo(
     () => [
@@ -21,6 +22,12 @@ export default function Header() {
     ],
     []
   );
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (menuOpen) {
@@ -41,63 +48,76 @@ export default function Header() {
   };
 
   return (
-    <div className="font-sans relative flex flex-col">
+    <div className="font-sans relative flex flex-col w-full z-50">
       
-      {/* 1. TOP ANNOUNCEMENT BAR (Kept darker for contrast) */}
-      <div className="relative z-50 bg-[#0B0F14] border-b border-white/5">
-        <div className="mx-auto max-w-7xl px-4 py-2">
-          <div className="flex items-center justify-center gap-3">
-            <span className="hidden sm:block text-[11px] font-medium text-slate-400 uppercase tracking-wide">
-              Limited Time Offer
-            </span>
+      {/* 1. TOP ANNOUNCEMENT BAR - GOLD THEME */}
+      {/* Dark warm background with Yellow accents to be complementary to the blue header */}
+      <div className="relative z-50 bg-[#120F05] border-b border-yellow-500/15">
+        <div className="mx-auto max-w-7xl px-4 py-2.5">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
             
+            {/* Left Label */}
+            <span className="font-medium tracking-wide uppercase text-[10px] sm:text-[11px] text-yellow-600/80">
+               Limited Time Offer
+            </span>
+
+            <div className="hidden sm:block h-3 w-px bg-yellow-500/20" />
+            
+            {/* Action Area */}
             <button
               onClick={handleCopy}
-              className="group flex items-center gap-2 rounded-full bg-yellow-500/10 px-3 py-1 text-[11px] font-medium text-yellow-500 hover:bg-yellow-500/20 transition-colors"
+              className="group flex items-center gap-2 transition-all hover:opacity-100 opacity-90"
             >
-              <Tag className="h-3 w-3" />
-              <span className="text-slate-200">{COUPON_TEXT}</span>
-              <div className="mx-1 h-3 w-px bg-white/10" />
-              <span className="font-mono font-bold tracking-wider text-yellow-400 group-hover:underline">
-                {COUPON_CODE}
-              </span>
-              {copied ? (
-                <Check className="ml-1 h-3 w-3 text-green-400" />
-              ) : (
-                <Copy className="ml-1 h-3 w-3 opacity-50 group-hover:opacity-100" />
-              )}
+              {/* Main text */}
+              <span className="text-yellow-100/80 font-normal">{COUPON_TEXT}</span>
+              
+              {/* Premium Gold Coupon Badge */}
+              <div className="flex items-center gap-1.5 rounded bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 transition-all group-hover:bg-yellow-500/20 group-hover:border-yellow-500/40">
+                <Tag className="h-3 w-3 text-yellow-500" />
+                <span className="font-mono font-bold tracking-wider text-yellow-400 group-hover:text-yellow-300">
+                  {COUPON_CODE}
+                </span>
+                {copied ? (
+                  <Check className="ml-1 h-3 w-3 text-green-400" />
+                ) : (
+                  <Copy className="ml-1 h-3 w-3 text-yellow-600 group-hover:text-yellow-400" />
+                )}
+              </div>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 2. MAIN HEADER (Updated Background) */}
-      {/* Changed bg-[#0B0F14]/90 to bg-[#161B22]/90 for better separation */}
-      <header className="sticky top-0 z-40 w-full border-b border-white/5 bg-[#161B22]/95 backdrop-blur-xl shadow-sm">
+      {/* 2. MAIN HEADER */}
+      <header 
+        className={`sticky top-0 z-40 w-full border-b transition-all duration-300 ${
+          scrolled 
+            ? "bg-[#020408]/95 backdrop-blur-xl border-white/10 shadow-2xl shadow-black/50" 
+            : "bg-[#020408]/80 backdrop-blur-lg border-transparent"
+        }`}
+      >
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex h-20 items-center justify-between">
             
             {/* LOGO AREA */}
-            <Link href="/" className="group flex items-center gap-3" aria-label="MR.NET Homepage">
-              <div className="flex flex-col justify-center">
-                <span className="text-base md:text-lg font-bold leading-tight tracking-tight text-white group-hover:text-red-500 transition-colors">
-                  Live Event Connectivity 
-                  <br />
-                  & Uplink Solutions
-                </span>
-                <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors">
-                  eventuplink.com
+            <Link href="/" className="group flex flex-col justify-center leading-none" aria-label="MR.NET Homepage">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-extrabold tracking-tight text-white group-hover:text-red-500 transition-colors">
+                  EVENT UPLINK
                 </span>
               </div>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500 group-hover:text-slate-300 transition-colors mt-1">
+                Live Connectivity Solutions
+              </span>
             </Link>
 
             {/* DESKTOP NAV */}
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-1">
               {nav.map((n) => (
                 <Link
                   key={n.href}
                   href={n.href}
-                  className="text-sm font-medium text-slate-400 transition-colors hover:text-white hover:underline decoration-red-500 decoration-2 underline-offset-8"
+                  className="px-4 py-2 text-sm font-medium text-slate-400 transition-all hover:text-white hover:bg-white/5 rounded-full"
                 >
                   {n.label}
                 </Link>
@@ -108,9 +128,10 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <Link
                 href="/#pricing"
-                className="hidden sm:inline-flex h-10 items-center justify-center rounded-full bg-red-600 px-6 text-sm font-bold text-white shadow-lg shadow-red-900/20 transition-all hover:bg-red-700 hover:scale-105 active:scale-95"
+                className="hidden sm:inline-flex h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-b from-red-600 to-red-700 px-6 text-sm font-bold text-white shadow-lg shadow-red-900/30 ring-1 ring-white/10 transition-all hover:from-red-500 hover:to-red-600 hover:scale-[1.02] active:scale-95"
               >
-                Rent / Buy
+                <span>Rent / Buy</span>
+                <ArrowRight className="h-4 w-4 opacity-70" />
               </Link>
 
               <button
@@ -129,55 +150,55 @@ export default function Header() {
       {/* 3. MOBILE MENU OVERLAY */}
       {menuOpen && (
         <div className="fixed inset-0 z-[100] lg:hidden">
-          {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/90 backdrop-blur-sm"
             onClick={() => setMenuOpen(false)}
           />
           
-          {/* Menu Content */}
-          <div className="absolute right-0 top-0 h-full w-[300px] border-l border-white/10 bg-[#161B22] p-6 shadow-2xl animate-in slide-in-from-right duration-300">
-            <div className="flex items-center justify-between mb-8">
-              <span className="text-lg font-bold text-white leading-tight">
-                Live Event <br/> Connectivity
+          <div className="absolute right-0 top-0 h-full w-[300px] border-l border-white/10 bg-[#0B0F14] p-6 shadow-2xl animate-in slide-in-from-right duration-300">
+            <div className="flex items-center justify-between mb-10">
+              <span className="text-lg font-bold text-white">
+                EVENT UPLINK
               </span>
               <button
                 onClick={() => setMenuOpen(false)}
-                className="rounded-full bg-white/5 p-2 text-white hover:bg-white/10"
+                className="rounded-full bg-white/5 p-2 text-white hover:bg-white/10 border border-white/5"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
               {nav.map((n) => (
                 <Link
                   key={n.href}
                   href={n.href}
                   onClick={() => setMenuOpen(false)}
-                  className="text-lg font-medium text-slate-300 hover:text-white"
+                  className="px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 >
                   {n.label}
                 </Link>
               ))}
               
-              <div className="my-2 h-px bg-white/10" />
+              <div className="my-6 h-px bg-white/10" />
 
               <Link
                 href="/#pricing"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center rounded-xl bg-red-600 py-3 text-base font-bold text-white hover:bg-red-700"
+                className="flex items-center justify-center gap-2 rounded-lg bg-red-600 py-3 text-base font-bold text-white hover:bg-red-700 shadow-lg shadow-red-900/20"
               >
                 Rent / Buy Now
               </Link>
 
-              <button
-                onClick={handleCopy}
-                className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-yellow-500/30 bg-yellow-500/5 py-3 text-sm text-yellow-200"
-              >
-                {copied ? <Check className="h-4 w-4" /> : <Tag className="h-4 w-4" />}
-                {copied ? "Code Copied!" : `Code: ${COUPON_CODE}`}
-              </button>
+              <div className="mt-4 rounded-lg border border-yellow-500/10 bg-yellow-500/[0.03] p-4 text-center">
+                 <p className="text-xs text-yellow-600 uppercase tracking-wider mb-2">Exclusive Offer</p>
+                 <button
+                  onClick={handleCopy}
+                  className="w-full flex items-center justify-center gap-2 py-2 text-sm font-mono text-yellow-400 bg-yellow-500/10 rounded border border-yellow-500/20 hover:bg-yellow-500/20 transition-colors"
+                >
+                  {copied ? "COPIED" : COUPON_CODE}
+                </button>
+              </div>
             </div>
           </div>
         </div>

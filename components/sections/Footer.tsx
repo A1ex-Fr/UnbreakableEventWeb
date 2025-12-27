@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link"; // Import Next.js Link
+import Link from "next/link";
 import Section from "@/components/ui/Section";
 import { 
   Twitter, 
@@ -25,7 +25,6 @@ export default function Footer() {
     return () => clearInterval(interval);
   }, []);
 
-  // LINK CONFIGURATION
   const PLATFORM_LINKS = [
     { label: "How it Works", href: "/#how-it-works" },
     { label: "Technical Specs", href: "/#technical" },
@@ -35,8 +34,8 @@ export default function Footer() {
 
   const RESOURCE_LINKS = [
     { label: "Contact Support", href: "/#contact" },
-    { label: "Documentation", href: "#" }, // Placeholder for future page
-    { label: "Status Page", href: "#" },   // Placeholder for future page
+    { label: "Documentation", href: "#" },
+    { label: "Status Page", href: "#" },
   ];
 
   const LEGAL_LINKS = [
@@ -45,7 +44,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative overflow-hidden bg-slate-950 pt-20 pb-10">
+    <footer className="relative overflow-hidden bg-slate-950 pt-10 pb-10 md:pt-20">
       
       {/* 1. Creative: Glowing Gradient Top Border */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-slate-900 via-red-500 to-slate-900 opacity-50 shadow-[0_0_20px_rgba(239,68,68,0.5)]" />
@@ -60,20 +59,24 @@ export default function Footer() {
         MR.NET
       </div>
 
+      {/* px-4 ensures it doesn't touch screen edges, but fills width visually */}
       <Section className="relative z-10 px-4">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
           
-          {/* Brand Column (Span 4) */}
-          <div className="lg:col-span-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-white text-2xl tracking-tighter w-fit">
+          {/* Brand Column (Span 4) 
+              Mobile: Centered text
+              Desktop: Left aligned
+          */}
+          <div className="flex flex-col items-center text-center lg:col-span-4 lg:items-start lg:text-left">
+            <Link href="/" className="flex items-center gap-2 font-bold text-white text-2xl tracking-tighter">
               <span className="text-red-500">MR</span>.NET
             </Link>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-slate-400">
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
               Engineered for the events that can't fail. We bond cellular, satellite, and landline connections into a single, unbreakable uplink.
             </p>
             
             {/* Live Status Pod */}
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
               <div className="flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-xs font-medium text-emerald-400">
                 <Activity className="h-3.5 w-3.5" />
                 <span>Systems Nominal</span>
@@ -86,15 +89,15 @@ export default function Footer() {
           </div>
 
           {/* Links Grid (Span 8) */}
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-8 lg:pl-12">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:col-span-8 lg:pl-12">
             
             {/* Group 1: Platform */}
             <div>
-              <h3 className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white">
+              <h3 className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white">
                 <Wifi className="h-3 w-3 text-red-500" />
                 Platform
               </h3>
-              <ul className="space-y-4 text-sm font-medium text-slate-400">
+              <ul className="space-y-3 text-sm font-medium text-slate-400">
                 {PLATFORM_LINKS.map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className="group flex items-center gap-2 transition-colors hover:text-white">
@@ -104,12 +107,12 @@ export default function Footer() {
                   </li>
                 ))}
                 {/* Bandwidth Calculator Link */}
-                <li>
+                <li className="pt-2">
                   <Link 
                     href="/bandwidth-calculator" 
-                    className="flex items-center gap-2 rounded-md bg-red-500/10 px-3 py-2 text-red-400 transition-all hover:bg-red-500/20 hover:text-red-300 hover:shadow-md hover:shadow-red-500/10"
+                    className="inline-flex items-center gap-2 rounded-md bg-red-500/10 px-3 py-2 text-xs sm:text-sm text-red-400 transition-all hover:bg-red-500/20 hover:text-red-300 hover:shadow-md hover:shadow-red-500/10"
                   >
-                    Bandwidth Calculator
+                    Bandwidth Calc
                   </Link>
                 </li>
               </ul>
@@ -117,10 +120,10 @@ export default function Footer() {
 
             {/* Group 2: Resources */}
             <div>
-              <h3 className="mb-6 text-xs font-bold uppercase tracking-widest text-white">
+              <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-white">
                 Resources
               </h3>
-              <ul className="space-y-4 text-sm font-medium text-slate-400">
+              <ul className="space-y-3 text-sm font-medium text-slate-400">
                 {RESOURCE_LINKS.map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className="group flex items-center gap-2 transition-colors hover:text-white">
@@ -133,11 +136,12 @@ export default function Footer() {
             </div>
 
             {/* Group 3: Legal */}
-            <div>
-              <h3 className="mb-6 text-xs font-bold uppercase tracking-widest text-white">
+            {/* On very small screens, this might wrap, but generally fits in 2 cols */}
+            <div className="col-span-2 sm:col-span-1">
+              <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-white">
                 Legal
               </h3>
-              <ul className="space-y-4 text-sm font-medium text-slate-400">
+              <ul className="space-y-3 text-sm font-medium text-slate-400">
                 {LEGAL_LINKS.map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className="transition-colors hover:text-white">
@@ -151,7 +155,7 @@ export default function Footer() {
         </div>
 
         {/* Footer Bottom Bar */}
-        <div className="mt-20 border-t border-white/5 pt-8 flex flex-col items-center justify-between gap-6 md:flex-row">
+        <div className="mt-12 border-t border-white/5 pt-8 flex flex-col items-center justify-between gap-6 md:flex-row md:mt-20">
           
           <div className="flex flex-col gap-1 text-center md:text-left">
             <p className="text-xs text-slate-500">

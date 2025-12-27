@@ -23,6 +23,7 @@ type Story = {
   icon: React.ElementType;
   kicker: string;
   image: string;
+  imagePos?: string; // "50% 78%" etc
 };
 
 const STORIES: Story[] = [
@@ -40,6 +41,7 @@ const STORIES: Story[] = [
     ],
     icon: Trophy,
     image: "/image/LiveStreamingSport.jpg",
+    imagePos: "50% 78%",
   },
   {
     id: "live-sales",
@@ -55,6 +57,7 @@ const STORIES: Story[] = [
     ],
     icon: ShoppingCart,
     image: "/image/LiveSales.png",
+    imagePos: "50% 58%",
   },
   {
     id: "worship",
@@ -70,6 +73,7 @@ const STORIES: Story[] = [
     ],
     icon: Church,
     image: "/image/churchworship.png",
+    imagePos: "50% 55%",
   },
   {
     id: "concerts",
@@ -85,6 +89,7 @@ const STORIES: Story[] = [
     ],
     icon: Music,
     image: "/image/LiveMusicConcert.png",
+    imagePos: "50% 60%",
   },
   {
     id: "virtual",
@@ -100,6 +105,7 @@ const STORIES: Story[] = [
     ],
     icon: MonitorPlay,
     image: "/image/LiveGameStreaming.png",
+    imagePos: "50% 55%",
   },
   {
     id: "festivals",
@@ -115,6 +121,7 @@ const STORIES: Story[] = [
     ],
     icon: PartyPopper,
     image: "/image/LiveFestivales.png",
+    imagePos: "50% 58%",
   },
   {
     id: "corporate",
@@ -130,6 +137,7 @@ const STORIES: Story[] = [
     ],
     icon: Building2,
     image: "/image/LiveCorporateEvent.png",
+    imagePos: "50% 55%",
   },
   {
     id: "tradeshow",
@@ -145,6 +153,7 @@ const STORIES: Story[] = [
     ],
     icon: Building2,
     image: "/image/LiveTradeShows.png",
+    imagePos: "50% 58%",
   },
 ];
 
@@ -164,46 +173,30 @@ export default function UseCasesAndStories({ sectionClassName }: SectionProps) {
   const s = STORIES[active];
   const Icon = s.icon;
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "ArrowRight") {
-      e.preventDefault();
-      setActive((v) => (v + 1) % STORIES.length);
-    }
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      setActive((v) => (v - 1 + STORIES.length) % STORIES.length);
-    }
-  };
-
   return (
-    // FIX: Changed max-w-5xl to max-w-6xl to match other sections
-    <section id="use-cases" className={cn("mx-auto max-w-6xl", sectionClassName)}>
-      {/* Main Unified Box */}
-      <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-950 shadow-2xl">
-        {/* TOP SECTION: Header & Tabs */}
-        <div className="border-b border-white/10 bg-slate-900/50 p-6 sm:p-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-            {/* Header Text */}
-            <div className="max-w-md">
-              <div className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
-                Use cases
-              </div>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                Choose your event type
-              </h2>
-              <p className="mt-2 text-sm text-slate-400">
-                See how MR.NET delivers in real-world conditions.
-              </p>
+    <section
+      id="use-cases"
+      className={cn("mx-auto max-w-6xl px-4 sm:px-6", sectionClassName)}
+    >
+      <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-slate-950 shadow-2xl">
+        {/* Header */}
+        <div className="border-b border-white/10 bg-slate-900/50 p-5 sm:p-8">
+          <div className="max-w-md">
+            <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
+              Use cases
             </div>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              Choose your event type
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              See how MR.NET delivers in real-world conditions.
+            </p>
           </div>
 
-          {/* Scrollable Tabs */}
-          <div
-            className="mt-6 flex overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0 md:pb-0"
-            role="tablist"
-            onKeyDown={onKeyDown}
-          >
-            <div className="flex gap-2 min-w-max">
+          {/* ✅ iPhone: 2-row grid. Desktop: single row scroll */}
+          <div className="mt-5">
+            {/* Mobile grid (2 rows) */}
+            <div className="grid grid-cols-2 gap-2 sm:hidden" role="tablist">
               {STORIES.map((st, idx) => {
                 const isActive = idx === active;
                 return (
@@ -214,26 +207,61 @@ export default function UseCasesAndStories({ sectionClassName }: SectionProps) {
                     id={`${tabId}-${st.id}-tab`}
                     aria-selected={isActive}
                     aria-controls={`${tabId}-${st.id}-panel`}
-                    tabIndex={isActive ? 0 : -1}
                     onClick={() => setActive(idx)}
                     className={cn(
-                      "rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300",
+                      "w-full rounded-full px-3 py-2.5 text-[13px] font-semibold transition",
+                      "leading-tight", // ✅ helps wrapping/height
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/60",
                       isActive
                         ? "bg-red-600 text-white shadow-lg shadow-red-900/20"
-                        : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white"
+                        : "bg-white/5 text-slate-300/70 active:bg-white/10"
                     )}
                   >
-                    {st.label}
+                    {/* ✅ text wrap inside pills */}
+                    <span className="block max-w-full break-words">
+                      {st.label}
+                    </span>
                   </button>
                 );
               })}
             </div>
+
+            {/* Desktop / tablet scroll row */}
+            <div
+              className="hidden sm:flex overflow-x-auto pb-2 scrollbar-hide"
+              role="tablist"
+            >
+              <div className="flex gap-2 min-w-max">
+                {STORIES.map((st, idx) => {
+                  const isActive = idx === active;
+                  return (
+                    <button
+                      key={st.id}
+                      type="button"
+                      role="tab"
+                      id={`${tabId}-${st.id}-tab-desktop`}
+                      aria-selected={isActive}
+                      aria-controls={`${tabId}-${st.id}-panel`}
+                      onClick={() => setActive(idx)}
+                      className={cn(
+                        "rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 whitespace-nowrap",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/60",
+                        isActive
+                          ? "bg-red-600 text-white shadow-lg shadow-red-900/20"
+                          : "bg-white/5 text-slate-300/70 hover:bg-white/10 hover:text-white"
+                      )}
+                    >
+                      {st.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* BOTTOM SECTION: Content Panel */}
-        <div className="bg-slate-950/40 p-6 sm:p-8">
+        {/* Panel */}
+        <div className="bg-slate-950/40 p-5 sm:p-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={s.id}
@@ -244,11 +272,38 @@ export default function UseCasesAndStories({ sectionClassName }: SectionProps) {
               animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="grid gap-8 lg:grid-cols-2 lg:items-center"
+              className="grid gap-6 sm:gap-8 lg:grid-cols-2 lg:items-center"
             >
-              {/* Left Column: Text & Bullets */}
-              <div className="order-2 lg:order-1">
-                <div className="inline-flex items-center gap-2 mb-4">
+              {/* ✅ Image FIRST on mobile, and ~50% smaller */}
+              <div className="order-1 lg:order-2">
+                <div
+                  className={cn(
+                    "-mx-5 sm:mx-0",
+                    "rounded-none sm:rounded-2xl",
+                    "relative w-[calc(100%+2.5rem)] sm:w-full",
+                    "overflow-hidden border border-white/10 bg-slate-900 shadow-xl",
+
+                    // ✅ smaller than previous: shorter aspect + lower max height
+                    "aspect-[16/9] sm:aspect-video lg:aspect-[4/3]",
+                    "max-h-[26vh] sm:max-h-none"
+                  )}
+                >
+                  <Image
+                    src={s.image}
+                    alt={`${s.label} use case`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 520px"
+                    priority={active === 0}
+                    className="object-cover"
+                    style={{ objectPosition: s.imagePos ?? "50% 60%" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
+                </div>
+              </div>
+
+              {/* ✅ Text wraps by default, but we also prevent weird overflow */}
+              <div className="order-2 lg:order-1 min-w-0">
+                <div className="inline-flex items-center gap-2 mb-3 sm:mb-4">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
                     <Icon className="h-4 w-4" />
                   </span>
@@ -257,56 +312,44 @@ export default function UseCasesAndStories({ sectionClassName }: SectionProps) {
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-bold text-white sm:text-3xl">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight break-words">
                   {s.title}
                 </h3>
-                <p className="mt-3 text-base text-slate-400 leading-relaxed">
+
+                <p className="mt-3 text-sm sm:text-base text-slate-400 leading-relaxed break-words">
                   {s.subtitle}
                 </p>
 
-                <div className="mt-6 rounded-2xl border border-white/5 bg-white/[0.02] p-5">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
+                <div className="mt-6 rounded-2xl border border-white/5 bg-white/[0.02] p-4 sm:p-5">
+                  <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
                     Key Benefits
                   </div>
                   <ul className="space-y-3">
                     {s.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-3">
+                      <li key={b} className="flex items-start gap-3 min-w-0">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                        <span className="text-sm text-slate-300">{b}</span>
+                        <span className="text-sm text-slate-200 leading-snug break-words">
+                          {b}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="mt-8 flex flex-wrap gap-4">
+                {/* <div className="mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <a
                     href="#contact"
-                    className="inline-flex items-center justify-center rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-200 active:scale-[0.99]"
+                    className="inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-slate-900 transition active:scale-[0.99] w-full sm:w-auto"
                   >
                     Get a Quote
                   </a>
                   <a
                     href="#how-it-works"
-                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.99]"
+                    className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-sm font-semibold text-white transition active:scale-[0.99] w-full sm:w-auto"
                   >
                     How it Works
                   </a>
-                </div>
-              </div>
-
-              {/* Right Column: Image */}
-              <div className="order-1 lg:order-2">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-xl">
-                  <Image
-                    src={s.image}
-                    alt={`${s.label} use case`}
-                    fill
-                    className="object-cover transition-transform duration-700 hover:scale-105"
-                    priority
-                  />
-                  {/* Inner Shadow Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
-                </div>
+                </div> */}
               </div>
             </motion.div>
           </AnimatePresence>

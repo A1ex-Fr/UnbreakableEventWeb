@@ -61,11 +61,12 @@ export default function Pricing({ sectionClassName = "" }: SectionProps) {
   };
 
   return (
-    <Section id="pricing" className={sectionClassName}>
-      <div className="mx-auto max-w-5xl px-4">
+    // FIX 1: Removed horizontal padding on mobile (px-0) so cards can be full width
+    <Section id="pricing" className={cn("px-0 sm:px-6", sectionClassName)}>
+      <div className="mx-auto max-w-5xl">
         
-        {/* Header */}
-        <div className="mb-12 text-center">
+        {/* Header - Added padding back here so text isn't edge-to-edge */}
+        <div className="mb-12 text-center px-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-red-400 mb-4">
             <Zap className="h-3 w-3" />
             Best Price in the Industry
@@ -79,10 +80,14 @@ export default function Pricing({ sectionClassName = "" }: SectionProps) {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+        {/* FIX 2: Layout Logic
+            - Mobile: `flex flex-col-reverse` (puts Purchase first, Rental second)
+            - Desktop: `lg:grid lg:grid-cols-2` (Side by side)
+        */}
+        <div className="flex flex-col-reverse gap-4 sm:gap-8 lg:grid lg:grid-cols-2 lg:gap-12 px-4 sm:px-0">
           
-          {/* RENTAL Option */}
-          <div className="relative flex flex-col rounded-3xl border border-white/10 bg-slate-900/50 p-8 shadow-2xl transition-transform hover:scale-[1.01]">
+          {/* RENTAL Option (Appears 2nd on Mobile) */}
+          <div className="relative flex flex-col rounded-3xl border border-white/10 bg-slate-900/50 p-6 sm:p-8 shadow-2xl transition-transform hover:scale-[1.01]">
             <div className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-500">
               Event Rental
             </div>
@@ -119,8 +124,9 @@ export default function Pricing({ sectionClassName = "" }: SectionProps) {
             </a>
           </div>
 
-          {/* PURCHASE Option */}
-          <div className="relative flex flex-col rounded-3xl border border-red-500/30 bg-gradient-to-b from-red-900/10 to-slate-900/50 p-8 shadow-2xl transition-transform hover:scale-[1.01]">
+          {/* PURCHASE Option (Appears 1st on Mobile) */}
+          {/* Added 'mb-4 lg:mb-0' just in case, though gap handles spacing */}
+          <div className="relative flex flex-col rounded-3xl border border-red-500/30 bg-gradient-to-b from-red-900/10 to-slate-900/50 p-6 sm:p-8 shadow-2xl transition-transform hover:scale-[1.01]">
             
             <div className="mb-4 text-sm font-bold uppercase tracking-widest text-red-400">
               Purchase Hardware
@@ -224,22 +230,24 @@ export default function Pricing({ sectionClassName = "" }: SectionProps) {
         </div>
 
         {/* IMPORTANT TRAFFIC NOTICE */}
-        <div className="mt-8 rounded-2xl border border-blue-500/20 bg-blue-500/5 p-6 text-center">
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-blue-400">
-              <Globe className="h-5 w-5" />
-            </div>
-            <div className="text-left">
-              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">
-                Data Traffic is Pay-As-You-Go
-              </h3>
-              <p className="text-sm text-slate-400 mt-1 leading-relaxed">
-                To keep hardware costs low, we charge for bonded data separately at just{" "}
-                <span className="text-slate-100 font-bold underline decoration-blue-500/50 underline-offset-4">
-                  $8 per GB
-                </span>
-                —but only when utilizing our premium embedded SIMs. You are free to <span className="text-slate-100 font-semibold">bring your own SIM cards</span> and avoid our data fees entirely.
-              </p>
+        <div className="mt-8 px-4 sm:px-0">
+          <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-6 text-center">
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-blue-400">
+                <Globe className="h-5 w-5" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">
+                  Data Traffic is Pay-As-You-Go
+                </h3>
+                <p className="text-sm text-slate-400 mt-1 leading-relaxed">
+                  To keep hardware costs low, we charge for bonded data separately at just{" "}
+                  <span className="text-slate-100 font-bold underline decoration-blue-500/50 underline-offset-4">
+                    $8 per GB
+                  </span>
+                  —but only when utilizing our premium embedded SIMs. You are free to <span className="text-slate-100 font-semibold">bring your own SIM cards</span> and avoid our data fees entirely.
+                </p>
+              </div>
             </div>
           </div>
         </div>

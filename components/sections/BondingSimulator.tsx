@@ -16,7 +16,7 @@ import {
   Zap,
   Router,
   Calculator,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -77,10 +77,8 @@ const FlowingLine = ({ className, isActive }: { className: string; isActive: boo
 );
 
 export default function BondingSimulator({ sectionClassName }: SectionProps) {
-  // Fix: Initialize state with full array so server/client match immediately (Hydration Safe)
   const [activeConns, setActiveConns] = useState<string[]>(["4g", "wifi", "sat", "wan"]);
 
-  // Fix: Calculate derived state directly during render (No useEffect needed for simple math)
   const totalSpeed = CONNECTIONS
     .filter((c) => activeConns.includes(c.id))
     .reduce((acc, curr) => acc + curr.speed, 0);
@@ -103,16 +101,20 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
       </div>
 
       {/* DIAGRAM CONTAINER */}
-      {/* Used standard flex/centering to avoid window.innerWidth logic */}
-      <div className="w-full h-[300px] sm:h-[350px] flex items-center justify-center overflow-hidden relative" aria-label="Interactive network bonding diagram">
-        <div className="relative w-[1200px] h-full shrink-0 origin-center transition-transform duration-500 -mt-4 scale-[0.52] xs:scale-[0.55] sm:scale-[0.7] lg:scale-100">
+      <div
+        // FIX 1: Reduced height on mobile (h-[240px]) to remove vertical gaps
+        className="w-full h-[200px] sm:h-[320px] flex items-center justify-center overflow-hidden relative"
+        aria-label="Interactive network bonding diagram"
+      >
+        {/* FIX 2: Adjusted Scale (scale-[0.48]) to ensure full width fits on small screens */}
+        <div className="relative w-[1200px] h-full shrink-0 origin-center transition-transform duration-500 -mt-6 scale-[0.42] xs:scale-[0.52] sm:scale-[0.7] lg:scale-100">
           <div
             className="absolute inset-0 opacity-[0.06] pointer-events-none"
             style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "20px 20px" }}
           />
 
-          {/* Positioning logic using purely CSS classes (Hydration Safe) */}
-          <div className="absolute inset-0 translate-x-[124px] lg:translate-x-[122px]">
+          {/* FIX 3: Massive translation shift (translate-x-[170px]) on mobile to recenter the left-heavy diagram */}
+          <div className="absolute inset-0 translate-x-[124px] sm:translate-x-[80px] lg:translate-x-[122px]">
             
             {/* 1. Equipment */}
             <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-[495px] mt-3 z-20">
@@ -133,7 +135,10 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
               </motion.div>
             </div>
 
-            <FlowingLine isActive={isAnyActive} className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-[400px] w-[52px] h-1" />
+            <FlowingLine
+              isActive={isAnyActive}
+              className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-[400px] w-[52px] h-1"
+            />
 
             {/* 2. Router + Sources GROUP */}
             <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-[355px] z-20">
@@ -169,6 +174,7 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   {CONNECTIONS.map((conn) => {
                     const isActive = activeConns.includes(conn.id);
+
                     return (
                       <button
                         key={conn.id}
@@ -176,14 +182,32 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
                         aria-pressed={isActive}
                         aria-label={`Toggle ${conn.label} connection`}
                         className={cn(
-                          "flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-300 hover:scale-[1.03] active:scale-95 bg-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500/50",
-                          isActive ? "border-slate-700 ring-1 ring-slate-800" : "opacity-60 grayscale border-slate-900"
+                          // Base
+                          "group relative flex items-center gap-2 px-3 py-2 rounded-full border bg-slate-900 shadow-sm transition-all duration-300",
+                          "focus:outline-none focus:ring-2 focus:ring-red-500/50",
+                          // States
+                          isActive
+                            ? "border-slate-700 ring-1 ring-slate-800"
+                            : "opacity-60 grayscale border-slate-900",
+                          // ✅ Professional hover
+                          "hover:border-white/15 hover:bg-white/[0.03] hover:shadow-[0_10px_22px_-18px_rgba(0,0,0,0.75)] hover:-translate-y-[1px]",
+                          "active:translate-y-0 active:shadow-none"
                         )}
                       >
-                        <div className={cn("p-1.5 rounded-full text-white", isActive ? conn.bg : "bg-slate-700")}>
+                        {/* soft hover sheen */}
+                        <span className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(120%_120%_at_20%_0%,rgba(255,255,255,0.08),transparent_55%)]" />
+
+                        <div
+                          className={cn(
+                            "relative p-1.5 rounded-full text-white transition-transform duration-300",
+                            isActive ? conn.bg : "bg-slate-700",
+                            "group-hover:scale-[1.05]"
+                          )}
+                        >
                           <conn.icon size={14} />
                         </div>
-                        <div className="text-[12px] font-bold text-slate-200 leading-tight">
+
+                        <div className="relative text-[12px] font-bold text-slate-200 leading-tight transition-colors duration-300 group-hover:text-white">
                           {conn.label}
                         </div>
                       </button>
@@ -193,10 +217,16 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
               </div>
             </div>
 
-            <FlowingLine isActive={isAnyActive} className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-[300px] w-[52px] h-1" />
+            <FlowingLine
+              isActive={isAnyActive}
+              className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-[300px] w-[52px] h-1"
+            />
 
             {/* 3. Central system SVG */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] flex items-center justify-between relative" aria-hidden="true">
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] flex items-center justify-between relative"
+              aria-hidden="true"
+            >
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible">
                 {CONNECTIONS.map((conn, index) => {
                   const isActive = activeConns.includes(conn.id);
@@ -258,7 +288,10 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
               </motion.div>
             </div>
 
-            <FlowingLine isActive={isAnyActive} className="absolute left-1/2 top-1/2 -translate-y-1/2 translate-x-[105px] w-[60px] h-1" />
+            <FlowingLine
+              isActive={isAnyActive}
+              className="absolute left-1/2 top-1/2 -translate-y-1/2 translate-x-[105px] w-[60px] h-1"
+            />
 
             {/* 5. Internet */}
             <div className="absolute left-1/2 top-1/2 -translate-y-1/2 translate-x-[150px] mt-3 z-20">
@@ -266,7 +299,12 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
                 <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-slate-900 border-4 border-slate-800 shadow-inner">
                   <Globe className="h-10 w-10 text-blue-400" />
                   <div className="absolute -bottom-6 bg-slate-900 text-white px-4 py-1.5 rounded-full text-[14px] lg:text-[11px] font-bold shadow-xl flex items-center gap-2 whitespace-nowrap border border-slate-700">
-                    <span className={cn("block h-2 w-2 rounded-full", totalSpeed > 0 ? "bg-emerald-400 animate-pulse" : "bg-red-500")} />
+                    <span
+                      className={cn(
+                        "block h-2 w-2 rounded-full",
+                        totalSpeed > 0 ? "bg-emerald-400 animate-pulse" : "bg-red-500"
+                      )}
+                    />
                     {totalSpeed} Mbps
                   </div>
                 </div>
@@ -279,69 +317,6 @@ export default function BondingSimulator({ sectionClassName }: SectionProps) {
         </div>
       </div>
 
-      {/* OUTPUTS ROW */}
-      <div className="mx-auto max-w-3xl px-4 mt-0">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-1">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            
-            <div className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950 py-2 px-3 transition-colors hover:border-red-500/20">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-red-400 border border-slate-800">
-                <Activity className="h-4 w-4" />
-              </div>
-              <div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Speed</div>
-                <div className="flex items-baseline gap-1">
-                  <span className={cn("text-lg font-bold transition-colors", totalSpeed > 0 ? "text-white" : "text-slate-600")}>
-                    {totalSpeed}
-                  </span>
-                  <span className="text-[10px] font-medium text-slate-500">Mbps</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950 py-2 px-3 transition-colors hover:border-red-500/20">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-emerald-400 border border-slate-800">
-                <Zap className="h-4 w-4" />
-              </div>
-              <div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Stream Status</div>
-                <div className={cn("text-xs font-bold", isAnyActive ? "text-emerald-400" : "text-slate-600")}>
-                  {isAnyActive ? "Stable & Bonded" : "No Signal"}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950 py-2 px-3 transition-colors hover:border-red-500/20">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-blue-400 border border-slate-800">
-                <Router className="h-4 w-4" />
-              </div>
-              <div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Local Output</div>
-                <div className="text-xs font-bold text-white">LAN / Wi-Fi</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8 flex justify-center px-4">
-        <Link 
-          href="/bandwidth-calculator"
-          className="group relative inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 pr-5 text-sm font-semibold text-white transition-all hover:bg-white/10 hover:border-red-500/30 hover:pr-6 focus:outline-none focus:ring-2 focus:ring-red-500/50"
-          aria-label="Go to Bandwidth Calculator"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-600/20 text-red-400 ring-1 ring-red-500/30 transition-colors group-hover:bg-red-600 group-hover:text-white">
-            <Calculator className="h-4 w-4" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-red-200 transition-colors">Planning an Event?</span>
-            <span>Calculate Bandwidth Needs</span>
-          </div>
-          <ArrowRight className="h-4 w-4 text-slate-500 transition-all group-hover:text-white group-hover:translate-x-1 ml-2" />
-          <div className="absolute inset-0 -z-10 rounded-full bg-red-600/5 opacity-0 blur-lg transition-opacity group-hover:opacity-100" />
-        </Link>
-      </div>
     </section>
   );
 }

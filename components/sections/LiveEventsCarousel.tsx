@@ -1,31 +1,65 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/components/ui/cn";
 
-const CLIENTS = [
-  "Adobe",
-  "B&H",
-  "Fujifilm",
-  "Avid",
-  "BoxCast",
-  "Sensor Industries",
-  "atVenu",
-  "JB&A",
-  "Blue Chip Sports",
-  "FlixBus",
+const CLIENT_LOGOS = [
+  { name: "Adobe", src: "/logos/adobe.png", w: 140, h: 40 },
+  { name: "B&H", src: "/logos/bh.webp", w: 140, h: 110 },
+  { name: "Fujifilm", src: "/logos/fujifilm.png", w: 150, h: 40 },
+  { name: "Avid", src: "/logos/avid.png", w: 110, h: 40 },
+  { name: "BoxCast", src: "/logos/boxcast.png", w: 150, h: 40 },
+  { name: "Sensor Industries", src: "/logos/sensor-industries.png", w: 170, h: 40 },
+  { name: "atVenu", src: "/logos/atvenu.png", w: 140, h: 40 },
+  { name: "JB&A", src: "/logos/jba.png", w: 130, h: 40 },
+  { name: "Blue Chip Sports", src: "/logos/blue-chip-sports.png", w: 170, h: 40 },
+  { name: "FlixBus", src: "/logos/flixbus.png", w: 160, h: 40 },
 ];
 
 type SectionProps = {
   sectionClassName?: string;
 };
 
+function LogoItem({ name, src, w, h }: { name: string; src: string; w: number; h: number }) {
+  return (
+    <div className="flex items-center justify-center min-w-[160px]">
+      <div
+        className={cn(
+          "group relative flex items-center justify-center",
+          "h-12 px-3",
+          "transition-all duration-300",
+          "hover:-translate-y-[1px]"
+        )}
+      >
+        {/* Subtle hover sheen */}
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-0 rounded-2xl opacity-0",
+            "bg-[radial-gradient(120%_120%_at_20%_0%,rgba(255,255,255,0.08),transparent_55%)]",
+            "transition-opacity duration-300 group-hover:opacity-100"
+          )}
+        />
+
+        <Image
+          src={src}
+          alt={name}
+          width={w}
+          height={h}
+          className={cn(
+            "h-8 w-auto object-contain",
+            "opacity-60 grayscale",
+            "transition-all duration-300",
+            "group-hover:opacity-90 group-hover:grayscale-0"
+          )}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function ClientLogos({ sectionClassName }: SectionProps) {
   return (
-    // FIX 1: Removed 'w-screen left-1/2 -translate-x-1/2'.
-    // 'w-full' is safer and works perfectly since your Main layout is full-width.
     <section className={cn("relative w-full overflow-hidden bg-transparent", sectionClassName)}>
-      
-      {/* Label */}
       <div className="relative z-20 mx-auto max-w-7xl px-4 text-center mb-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500/80">
           Trusted by production teams at
@@ -34,44 +68,19 @@ export default function ClientLogos({ sectionClassName }: SectionProps) {
 
       <div className="w-full">
         <div className="relative w-full overflow-hidden">
-          
-          {/* Fade Gradient (Left) */}
           <div className="absolute top-0 bottom-0 left-0 z-10 w-32 bg-gradient-to-r from-slate-950 to-transparent pointer-events-none" />
-          
-          {/* Fade Gradient (Right) */}
           <div className="absolute top-0 bottom-0 right-0 z-10 w-32 bg-gradient-to-l from-slate-950 to-transparent pointer-events-none" />
 
-          {/* Scrolling Container */}
-          {/* FIX 2: Added logic for reduced motion in CSS below */}
-          <div className="flex w-max animate-scroll gap-24 items-center">
-            
-            {/* Original List */}
-            {CLIENTS.map((client, i) => (
-              <div
-                key={`${client}-${i}`}
-                className="flex items-center justify-center min-w-[140px]"
-              >
-                <span className="text-2xl font-bold uppercase tracking-tighter text-slate-600/80 hover:text-slate-400 transition-colors cursor-default whitespace-nowrap">
-                  {client}
-                </span>
-              </div>
+          <div className="flex w-max animate-scroll gap-14 items-center">
+            {CLIENT_LOGOS.map((c, i) => (
+              <LogoItem key={`${c.name}-${i}`} {...c} />
             ))}
 
-            {/* Duplicate List for Infinite Effect */}
-            {/* FIX 3: aria-hidden="true" hides duplicates from screen readers */}
-            <div className="flex gap-24 items-center" aria-hidden="true">
-              {CLIENTS.map((client, i) => (
-                <div
-                  key={`duplicate-${client}-${i}`}
-                  className="flex items-center justify-center min-w-[140px]"
-                >
-                  <span className="text-2xl font-bold uppercase tracking-tighter text-slate-600/80 hover:text-slate-400 transition-colors cursor-default whitespace-nowrap">
-                    {client}
-                  </span>
-                </div>
+            <div className="flex gap-14 items-center" aria-hidden="true">
+              {CLIENT_LOGOS.map((c, i) => (
+                <LogoItem key={`dup-${c.name}-${i}`} {...c} />
               ))}
             </div>
-
           </div>
         </div>
       </div>
@@ -80,7 +89,6 @@ export default function ClientLogos({ sectionClassName }: SectionProps) {
         .animate-scroll {
           animation: scroll 40s linear infinite;
         }
-        
         @keyframes scroll {
           0% {
             transform: translateX(0);
@@ -89,18 +97,14 @@ export default function ClientLogos({ sectionClassName }: SectionProps) {
             transform: translateX(-50%);
           }
         }
-
-        /* FIX 2: Respect user's motion preferences */
         @media (prefers-reduced-motion: reduce) {
           .animate-scroll {
             animation: none;
-            /* Wrap items so they are all visible without scrolling */
-            flex-wrap: wrap; 
+            flex-wrap: wrap;
             justify-content: center;
             width: 100%;
             transform: none;
           }
-          /* Hide the duplicate list if we aren't scrolling */
           .animate-scroll > div[aria-hidden="true"] {
             display: none;
           }
