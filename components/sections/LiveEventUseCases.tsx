@@ -152,7 +152,11 @@ function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function UseCasesAndStories() {
+type SectionProps = {
+  sectionClassName?: string;
+};
+
+export default function UseCasesAndStories({ sectionClassName }: SectionProps) {
   const [active, setActive] = useState(0);
   const reduceMotion = useReducedMotion();
   const tabId = useId();
@@ -173,7 +177,7 @@ export default function UseCasesAndStories() {
 
   return (
     // FIX: Changed max-w-5xl to max-w-6xl to match other sections
-    <section id="use-cases" className="mx-auto max-w-6xl px-4 pb-12 sm:pb-16 pt-8">
+    <section id="use-cases" className={cn("mx-auto max-w-6xl", sectionClassName)}>
       {/* Main Unified Box */}
       <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-950 shadow-2xl">
         {/* TOP SECTION: Header & Tabs */}

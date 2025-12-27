@@ -10,9 +10,9 @@ export default function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className={cn("mx-auto max-w-6xl px-6 scroll-mt-28", className)}>
+    <section id={id} className={cn("mx-auto w-full max-w-6xl scroll-mt-28", className)}>
       {children}
-      
+
     </section>
   );
 }

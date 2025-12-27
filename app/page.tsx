@@ -9,13 +9,11 @@ import TechnicalSpecs from "@/components/sections/TechnicalSpecs";
 import Pricing from "@/components/sections/Pricing";
 import Contact from "@/components/sections/Contact";
 
-/* FIX APPLIED:
-  1. gap-0: Removes external spacing between components.
-  2. [&>section]:!py-8: FORCES mobile vertical padding to be small (2rem/32px).
-  3. [&>section]:md:!py-16: FORCES desktop vertical padding to be moderate (4rem/64px).
-     (Normal template default is usually py-24 or py-32, which is huge)
-  
-  Note: The '!' is crucial. It overrides the classes inside the components.
+/* FIX EXPLANATION:
+   1. gap-0: We remove the flex gap entirely.
+   2. [&>section]:!py-8: This acts as a "Force" command. It finds every <section> 
+      tag inside this div and forces its top/bottom padding to be small (32px).
+   3. The '!' is important—it overrides the padding written inside the components.
 */
 const SECTION_GAP_CLASSES = "gap-0 [&>section]:!py-8 [&>section]:md:!py-16";
 const SECTION_BOTTOM_SPACER = "pb-8 md:pb-12";
@@ -27,10 +25,12 @@ export default function Page() {
       <div className={`flex flex-col ${SECTION_GAP_CLASSES}`}>
 
         {/* 1. HERO 
-            Note: If the Hero looks too short at the top because of the override, 
-            you can wrap it in a plain <div> to shield it from the [&>section] selector.
+            We wrap the Hero in a <div> to protect it from the padding override. 
+            The Hero usually needs to be full height and shouldn't be squashed.
         */}
-        <LiveEventsHero />
+        <div>
+          <LiveEventsHero />
+        </div>
 
         {/* 2. TRUST */}
         <LiveEventsCarousel />

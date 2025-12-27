@@ -10,7 +10,11 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export default function Contact() {
+type SectionProps = {
+  sectionClassName?: string;
+};
+
+export default function Contact({ sectionClassName = "" }: SectionProps) {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
   const [copied, setCopied] = useState(false);
 
@@ -42,7 +46,7 @@ Additional notes:
   };
 
   return (
-    <Section id="contact" className="py-10 sm:py-10">
+    <Section id="contact" className={sectionClassName}>
       <div className="mx-auto max-w-6xl px-4">
         
         {/* Contact Form Section */}

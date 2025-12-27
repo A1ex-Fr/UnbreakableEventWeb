@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/components/ui/cn";
+
 const CLIENTS = [
   "Adobe",
   "B&H",
@@ -13,11 +15,15 @@ const CLIENTS = [
   "FlixBus",
 ];
 
-export default function ClientLogos() {
+type SectionProps = {
+  sectionClassName?: string;
+};
+
+export default function ClientLogos({ sectionClassName }: SectionProps) {
   return (
-    // FIX 1: Removed 'w-screen left-1/2 -translate-x-1/2'. 
+    // FIX 1: Removed 'w-screen left-1/2 -translate-x-1/2'.
     // 'w-full' is safer and works perfectly since your Main layout is full-width.
-    <section className="relative w-full py-8 overflow-hidden bg-transparent">
+    <section className={cn("relative w-full overflow-hidden bg-transparent", sectionClassName)}>
       
       {/* Label */}
       <div className="relative z-20 mx-auto max-w-7xl px-4 text-center mb-8">

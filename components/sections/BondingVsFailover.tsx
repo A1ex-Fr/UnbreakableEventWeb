@@ -2,10 +2,15 @@
 
 import React from "react";
 import { Activity, ArrowRight } from "lucide-react";
+import { cn } from "@/components/ui/cn";
 
-export default function BondingVsFailover() {
+type SectionProps = {
+  sectionClassName?: string;
+};
+
+export default function BondingVsFailover({ sectionClassName }: SectionProps) {
   return (
-    <section id="bonding" className="mx-auto max-w-6xl px-0 sm:px-4 py-12 sm:py-24">
+    <section id="bonding" className={cn("mx-auto w-full max-w-6xl", sectionClassName)}>
       {/* MOBILE: Rounded-none, Border-0, Full Width 
         DESKTOP: Rounded-3xl, Border, Shadow 
       */}

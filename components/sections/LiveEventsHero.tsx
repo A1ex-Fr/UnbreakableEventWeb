@@ -5,10 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Radio, ShieldCheck, Zap, Plug } from "lucide-react";
 import { Youtube } from "lucide-react";
+import { cn } from "@/components/ui/cn";
 
-export default function HeroTop() {
+type SectionProps = {
+  sectionClassName?: string;
+};
+
+export default function HeroTop({ sectionClassName }: SectionProps) {
   return (
-    <section className="mx-auto max-w-6xl px-4 pt-10 pb-6 sm:pt-8">
+    <section className={cn("mx-auto w-full max-w-6xl", sectionClassName)}>
       <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 p-5 shadow-[0_10px_32px_-18px_rgba(0,0,0,0.70)] sm:p-10">
         
         {/* Light Glow Effect */}

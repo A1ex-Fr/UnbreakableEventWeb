@@ -25,6 +25,10 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+type SectionProps = {
+  sectionClassName?: string;
+};
+
 const CONNECTIONS = [
   { id: "4g", label: "4G LTE", speed: 80, color: "text-emerald-400", bg: "bg-emerald-500", hex: "#10b981", icon: Radio },
   { id: "wifi", label: "Local Wi-Fi", speed: 60, color: "text-cyan-400", bg: "bg-cyan-500", hex: "#06b6d4", icon: Wifi },
@@ -72,7 +76,7 @@ const FlowingLine = ({ className, isActive }: { className: string; isActive: boo
   </div>
 );
 
-export default function BondingSimulator() {
+export default function BondingSimulator({ sectionClassName }: SectionProps) {
   // Fix: Initialize state with full array so server/client match immediately (Hydration Safe)
   const [activeConns, setActiveConns] = useState<string[]>(["4g", "wifi", "sat", "wan"]);
 
@@ -88,7 +92,7 @@ export default function BondingSimulator() {
   const isAnyActive = activeConns.length > 0;
 
   return (
-    <section id="bonding" className="pb-16 pt-12 bg-slate-950 overflow-hidden">
+    <section id="bonding" className={cn("w-full bg-slate-950 overflow-hidden", sectionClassName)}>
       <div className="mb-6 text-center px-4">
         <h2 className="mb-2 text-2xl font-bold tracking-tight text-white md:text-4xl">
           Visual <span className="text-red-400"> Bonding</span> Simulator

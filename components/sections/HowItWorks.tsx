@@ -1,6 +1,7 @@
 "use client";
 
 import { PlugZap, Layers3, ShieldCheck, Headset, ChevronRight } from "lucide-react";
+import { cn } from "@/components/ui/cn";
 
 const STEPS = [
   {
@@ -29,10 +30,14 @@ const STEPS = [
   },
 ];
 
-export default function HowItWorks() {
+type SectionProps = {
+  sectionClassName?: string;
+};
+
+export default function HowItWorks({ sectionClassName }: SectionProps) {
   return (
     // FIX 1: Use standard layout classes (max-w-6xl px-4) to match other sections exactly
-    <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-4 sm:py-4">
+    <section id="how-it-works" className={cn("mx-auto w-full max-w-6xl", sectionClassName)}>
       
       {/* Main Container: Dark "Hardware" Look */}
       <div className="rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-2xl shadow-black/50 sm:p-10">

@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "@/components/ui/Section";
-import { 
-  Cpu, 
+import {
+  Cpu,
   Network, 
   Layers, 
   Radio, 
@@ -17,6 +17,10 @@ import {
   Maximize2,
   X
 } from "lucide-react";
+
+type SectionProps = {
+  sectionClassName?: string;
+};
 
 const SPECS = [
   {
@@ -60,7 +64,7 @@ const SLIDES = [
   "/image/mrnet_box_5.webp",
 ];
 
-export default function Technical() {
+export default function Technical({ sectionClassName = "" }: SectionProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
 
@@ -78,7 +82,7 @@ export default function Technical() {
   const goToSlide = (index: number) => setCurrentSlide(index);
 
   return (
-    <Section id="technical" className="py-6 sm:py-6">
+    <Section id="technical" className={sectionClassName}>
       <div className="rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-2xl shadow-black/50 sm:p-10">
         
         {/* Header */}

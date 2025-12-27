@@ -11,10 +11,14 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+type SectionProps = {
+  sectionClassName?: string;
+};
+
 // Define valid coupons and their discount values
 const COUPONS: Record<string, number> = {
   "SAVE100": 100,
-  "MRNET200": 200, 
+  "MRNET200": 200,
 };
 
 // Sub-component to handle number animation
@@ -32,7 +36,7 @@ function AnimatedPrice({ value }: { value: number }) {
   return <motion.span>{display}</motion.span>;
 }
 
-export default function Pricing() {
+export default function Pricing({ sectionClassName = "" }: SectionProps) {
   const [couponInput, setCouponInput] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [couponError, setCouponError] = useState("");
@@ -57,7 +61,7 @@ export default function Pricing() {
   };
 
   return (
-    <Section id="pricing" className="py-3 sm:py-1">
+    <Section id="pricing" className={sectionClassName}>
       <div className="mx-auto max-w-5xl px-4">
         
         {/* Header */}
