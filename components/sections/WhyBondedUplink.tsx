@@ -10,7 +10,7 @@ export default function BondingVsFailover() {
     // Added: relative z-20 (Stacking order)
     <section 
       id="bonding" 
-      className="mx-auto max-w-6xl px-0 sm:px-4 pb-16 sm:pb-24 -mt-24 sm:-mt-48 relative z-20"
+      className="mx-auto max-w-6xl px-0 sm:px-4 pb-16 sm:pb-24"
     >
       {/* MOBILE: Rounded-none, Border-0, Full Width 
         DESKTOP: Rounded-3xl, Border, Shadow 

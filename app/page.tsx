@@ -9,57 +9,57 @@ import TechnicalSpecs from "@/components/sections/TechnicalSpecs";
 import Pricing from "@/components/sections/Pricing";
 import Contact from "@/components/sections/Contact";
 
-const SECTION_GAP_CLASSES = "gap-12 sm:gap-12";
-const SECTION_BOTTOM_SPACER = "pb-12 sm:pb-12";
+/* FIX APPLIED:
+  1. gap-0: Removes external spacing between components.
+  2. [&>section]:!py-8: FORCES mobile vertical padding to be small (2rem/32px).
+  3. [&>section]:md:!py-16: FORCES desktop vertical padding to be moderate (4rem/64px).
+     (Normal template default is usually py-24 or py-32, which is huge)
+  
+  Note: The '!' is crucial. It overrides the classes inside the components.
+*/
+const SECTION_GAP_CLASSES = "gap-0 [&>section]:!py-8 [&>section]:md:!py-16";
+const SECTION_BOTTOM_SPACER = "pb-8 md:pb-12";
 
 export default function Page() {
   return (
-    /* GLOBAL LAYOUT WRAPPER 
-      - bg-slate-950: Ensures the background color is consistent behind all gaps.
-      - w-full: Prevents horizontal overflow issues.
-    */
     <main className="flex flex-col w-full bg-slate-950">
       
-      {/* GLOBAL SPACING CONTROL
-        - gap-24 (96px): Standard gap between sections on MOBILE.
-        - sm:gap-40 (160px): Standard gap between sections on DESKTOP.
-        
-        This gap applies evenly between *every* child component below.
-      */}
       <div className={`flex flex-col ${SECTION_GAP_CLASSES}`}>
 
-        {/* 1. HERO: The Promise. "Unbreakable Internet for Live Events." */}
+        {/* 1. HERO 
+            Note: If the Hero looks too short at the top because of the override, 
+            you can wrap it in a plain <div> to shield it from the [&>section] selector.
+        */}
         <LiveEventsHero />
 
-        {/* 2. TRUST: Immediate credibility. "Trusted by production teams at..." */}
+        {/* 2. TRUST */}
         <LiveEventsCarousel />
 
-        {/* 3. THE PROBLEM: Why standard internet fails. Bonding vs Failover. */}
-        {/* Note: Ensure -mt margins are removed from this component now. */}
+        {/* 3. THE PROBLEM */}
         <BondingVsFailover />
 
-        {/* 4. THE SOLUTION: High-level overview of the workflow. */}
+        {/* 4. THE SOLUTION */}
         <HowItWorks />
 
-        {/* 5. INTERACTIVE DEMO: Visual proof of the "Bonding" concept. */}
+        {/* 5. INTERACTIVE DEMO */}
         <BondingSimulator />
 
-        {/* 6. RELEVANCE: "Does this work for MY specific event?" */}
+        {/* 6. RELEVANCE */}
         <LiveEventUseCases />
 
-        {/* 7. COMPARISON: The logical choice. "Why MR.NET vs Competitors?" */}
+        {/* 7. COMPARISON */}
         <WhyBondedUplink />
 
-        {/* 8. SPECS: For the engineers/technical decision makers. */}
+        {/* 8. SPECS */}
         <TechnicalSpecs />
 
-        {/* 9. OFFER: Clear pricing and purchase options. */}
+        {/* 9. OFFER */}
         <Pricing />
 
-        {/* 10. ACTION: Final conversion point. */}
+        {/* 10. ACTION */}
         <Contact />
         
-        {/* Bottom spacer to breathe before footer (optional) */}
+        {/* Bottom spacer */}
         <div className={SECTION_BOTTOM_SPACER} />
       </div>
     </main>
